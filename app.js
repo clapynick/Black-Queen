@@ -1,91 +1,33 @@
+let express = require('express'); // Import the express module, now the var express holds the framework of express, this express variable is also a function, thus we can use it as express();
+let socket = require('socket.io'); // Import the socket module, allows us get inputs from the client and output data from the server to the clients
 
-var express = require('express'); // Get the express module
-var app = express();
-var serv = require('http').Server(app); // Here we create a server
+/* Set up server using express */
+let app = express(); // Call express, this allows us to make an express application - an app which host our website
+let server = app.listen(2000); // Create a server on port 2000
 
-app.get('/', function(req, res) { // If the request url does not exsist then 
-	res.sendFile(__dirname + '/client/index.html'); // send them to the index
-});
-app.use('/client', express.static(__dirname + '/client')); // If the url equals the client, then send client contents
+/* Host files on the express server found in 'client' */
+app.use(express.static('client')); // This is saying for the app to host everything in the 'client' folder
 
-serv.listen(2000); // Here we make the server listen to the port 2000, which means that whenever there is a request to the port 2000, our server will be notified
+/* Setup the io for sockets */
+let io = socket(server); // Creats the io object which allows use to use sockets functionality
 
-console.log("Server started"); // Indication to show that server has started
+/* Log success */
+console.log("Server is running!"); // log that the server is running.
 
-var Player = function(id){
-	var self = {
-		id: id,
-		x: 10,
-		y: 10,
-		color: ['lime', 'red', 'orange', 'purple', 'yellow', 'aqua', 'blue'][Math.floor(6 * Math.random())],
-		pressingRight: false,
-		pressingLeft: false,
-		speed: 3
-	}
-
-	self.move = function(){
-		if(self.pressingRight && !self.pressingLeft){
-			self.x+=self.speed;
-			self.pressingLeft = true;
-		}
-	} 
-
-	return self;
-}
-
-var SOCKET_LIST = {};
-var PLAYER_LIST = {};
-
-var io = require("socket.io")(serv, {});
-
+let SOCKET_LIST = {}; // Holds all the connected sockets
 io.sockets.on('connection', function(socket){
-	//console.log(SOCKET_LIST.length);
-	if(Object.keys(SOCKET_LIST).length < 2){
-		var id = Math.random();
-		socket.id = id;
-		var player = Player(id);
+		socket.id = Math.random();
 
-		SOCKET_LIST[socket.id] = socket;
-		PLAYER_LIST[player.id] = player;
+		/*socket.on('x', (data) => {
 
-		if(Object.keys(PLAYER_LIST).length > 1){
-			player.y = 400;
-		}
-
-		socket.on('keyPress', function(data){
-			var key = data.key;
-			if(key == 37 || key == 65){
-				player.pressingLeft = data.state;
-			}
-			
-			if(key == 39 || key == 68){
-				player.pressingRight = data.state;
-			}
 		});
 
 		socket.on('disconnect', function(){
 			delete SOCKET_LIST[socket.id];
-			delete PLAYER_LIST[player.id];
-		});
-	}
+		});*/
 });
 
 setInterval(function(){
-	var pack = [];
-	for(var i in PLAYER_LIST){
-		var player = PLAYER_LIST[i];
-		player.move();
 
-		pack.push({
-			x: player.x,
-			y: player.y,
-		 	color: player.color
-		});
-	}
-
-	for(var i in SOCKET_LIST){
-		var socket = SOCKET_LIST[i];
-		socket.emit("playerData", pack);
-	}
 
 }, 1000/30);
