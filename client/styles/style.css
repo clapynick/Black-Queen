@@ -1,0 +1,29 @@
+html, body, .container {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+}
+
+.container .region {
+  border: 1px solid black;
+  box-sizing: border-box;
+  moz-box-sizing: border-box; /* cross browser support */
+}
+
+.container .region .card {
+  
+}
+
+.container .region p {
+  font-size: 20px;
+}
+
+.container .table {
+  height: 30%;
+  width: 100%;
+}
+
+.container .player-hand {
+  height: 70%;
+  width: 100%;
+}
