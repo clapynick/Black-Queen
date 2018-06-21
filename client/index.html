@@ -2,29 +2,18 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-
-    <!-- jQuery --->
+    <link rel="stylesheet" href="styles/login.css">
     <script src="js/jquery.min.js"></script>
-    <!-- jQuery UI -->
-    <script src=""></script>
-    <!-- Socket.io -->
     <script src="js/socketio.js"></script>
-    <!-- Main script -->
-    <script src="js/script.js"></script>
-
-    <!-- CSS for UI -->
-    <link rel="stylesheet" href="styles/style.css" />
-    <title>Black Queen</title>
+    <script src="js/login/script.js"></script>
+    <title>Black Queen Login</title>
   </head>
   <body>
-    <div class="container">
-      <div class="table region">
-          <p>Table</p>
-      </div>
-
-      <div class="player-hand region">
-        <p>Your cards</p>
-      </div>
-    </div>
+    <center>
+      <form id="username-form">
+        <input type="text" class="username-txt" placeholder="Username" />
+        <br />
+      </form>
+    </center>
   </body>
 </html>

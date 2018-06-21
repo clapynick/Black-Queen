@@ -14,17 +14,18 @@ let io = socket(server); // Creats the io object which allows use to use sockets
 /* Log success */
 console.log("Server is running!"); // log that the server is running.
 
-let SOCKET_LIST = {}; // Holds all the connected sockets
+let SOCKET_LIST = {}; // Holds all the connected sockets/client
+let PLAYER_LIST = {}; // Holds all the players
+
 io.sockets.on('connection', function(socket){
-		socket.id = Math.random();
-
-		/*socket.on('x', (data) => {
-
+		socket.on('createPlayer', (data) => {
+			socket.id = Math.random();
+			console.log(data +" joined the game!");
 		});
 
 		socket.on('disconnect', function(){
 			delete SOCKET_LIST[socket.id];
-		});*/
+		});
 });
 
 setInterval(function(){
